@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { View, StyleSheet, Text, Alert } from "react-native";
-import { GlobalStyles } from "../../constants/styles";
-import { getFormattedDate } from "../../util/date";
-import Button from "../UI/Button";
+import { StyleSheet, Text, View } from "react-native";
 
 import Input from "./Input";
+import Button from "../UI/Button";
+import { getFormattedDate } from "../../util/date";
+import { GlobalStyles } from "../../constants/styles";
 
 function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
   const [inputs, setInputs] = useState({
     amount: {
       value: defaultValues ? defaultValues.amount.toString() : "",
-      isValid: true, // !!defaultValues
+      isValid: true,
     },
     date: {
       value: defaultValues ? getFormattedDate(defaultValues.date) : "",
@@ -27,8 +27,6 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
       return {
         ...curInputs,
         [inputIdentifier]: { value: enteredValue, isValid: true },
-        // [inputIdentifier] =  amount: "",date: "",description: "",
-        // In enteredValue values adding to [inputIdentifier]
       };
     });
   }
@@ -44,8 +42,8 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
     const dateIsValid = expenseData.date.toString() !== "Invalid Date";
     const descriptionIsValid = expenseData.description.trim().length > 0;
 
-    if (!amountIsValid || !dateIsValid || descriptionIsValid) {
-      // Alert.alert("Invalid input", "Please check your input values");
+    if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+      // Alert.alert('Invalid input', 'Please check your input values');
       setInputs((curInputs) => {
         return {
           amount: { value: curInputs.amount.value, isValid: amountIsValid },
@@ -58,6 +56,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
       });
       return;
     }
+
     onSubmit(expenseData);
   }
 
@@ -119,6 +118,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
     </View>
   );
 }
+
 export default ExpenseForm;
 
 const styles = StyleSheet.create({
@@ -139,6 +139,11 @@ const styles = StyleSheet.create({
   rowInput: {
     flex: 1,
   },
+  errorText: {
+    textAlign: "center",
+    color: GlobalStyles.colors.error500,
+    margin: 8,
+  },
   buttons: {
     flexDirection: "row",
     justifyContent: "center",
@@ -147,10 +152,5 @@ const styles = StyleSheet.create({
   button: {
     minWidth: 120,
     marginHorizontal: 8,
-  },
-  errorText: {
-    textAlign: "center",
-    color: GlobalStyles.colors.error500,
-    margin: 8,
   },
 });
